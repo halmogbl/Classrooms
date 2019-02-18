@@ -1,16 +1,70 @@
 {% extends "base.html" %}
 
-{% block content %}
-<div class="card text-center">
-  <div class="card-header" style="background-color: #e3f2fd; color: 000034;">
-    Classroom Details
-  </div>
-  <div class="card-body">
-    <h5 class="card-title" style="color: 000034;">{{classroom.name}} {{classroom.subject}}</h5>
-    <p class="card-text" style="color: 000034;">{{classroom.year}}</p>
-    <a href="{% url 'classroom-update' classroom.id %}" class="btn" style="background-color: #000034; color: white;">Update</a>
-    <a href="{% url 'classroom-delete' classroom.id %}" class="btn" style="background-color: #FFA500; color: #000034;">Delete</a>
-  </div>
-</div>
+{% block title %}Classroom Detail{% endblock title %}
 
+{% block content %}
+
+<br>
+<div class="card">
+  <h5 class="card-header">Classroom Details</h5>
+
+  <div class="card-body">
+    <h5 class="card-title">{{classroom.name}}</h5>
+    <p class="card-text">{{classroom.subject|linebreaks}}</p>
+    <p class="card-text">{{classroom.year}}</p>
+
+    {% if  request.user == classroom.teacher %}
+
+    <a href="{% url 'classroom-update' classroom.id %}" class="btn btn-outline-success btn-block" style="background-color: #000034; color: white;">Update</a>
+    <a href="{% url 'classroom-delete' classroom.id %}" class="btn btn-outline-success btn-block" style="background-color: #FFA500; color: #000034;">Delete</a>
+    
+    <a href="{% url 'student-create' classroom.id %}" class="btn btn-outline-success btn-block">Add Student</a>
+
+    {% endif %}
+  </div>
+
+	<div class="card-body">
+  		<div class="card-body">
+  		  <h5 class="card-title">Students Info</h5>
+  		</div>
+ 
+    <div class="row text-center">	
+
+		<div class="card-body">
+
+
+		{% for student in students %}
+
+
+
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">
+        <p><b>{{student.name}}</b></p>
+        <p>Student BirthDay :{{student.date_of_birth|linebreaks}}</p>
+        <p>{{student.gender}} </p>
+        <p>Student Grade :{{student.exam_grade}} </p>
+      </li>
+    </ul>
+
+
+
+
+		{% if request.user == classroom.teacher %}
+        <div class="btn btn-outline-success btn-block">
+            <a href="{% url 'student-update' student.id %}" class="btn-block ">Update</a>
+        </div>
+
+        <br>
+        <div class="btn btn-outline-danger btn-block">
+            <a href="{% url 'student-delete' student.id %}" class="btn-block">Delete</a>
+        </div>
+        {% endif %}
+   
+    	</div>
+        {% endfor %}
+	</div>
+	</div
+
+</div>
 {% endblock content %}
+
