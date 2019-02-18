@@ -4,6 +4,10 @@
 
 {% block content %}
 
+
+
+
+
 <br>
 <div class="card">
   <h5 class="card-header">Classroom Details</h5>
@@ -33,38 +37,51 @@
 		<div class="card-body">
 
 
-		{% for student in students %}
-
-
-
-    <ul class="list-group list-group-flush">
-      <li class="list-group-item">
-        <p><b>{{student.name}}</b></p>
-        <p>Student BirthDay :{{student.date_of_birth|linebreaks}}</p>
-        <p>{{student.gender}} </p>
-        <p>Student Grade :{{student.exam_grade}} </p>
-      </li>
-    </ul>
+		
 
 
 
 
-		{% if request.user == classroom.teacher %}
-        <div class="btn btn-outline-success btn-block">
-            <a href="{% url 'student-update' student.id %}" class="btn-block ">Update</a>
-        </div>
 
-        <br>
-        <div class="btn btn-outline-danger btn-block">
-            <a href="{% url 'student-delete' student.id %}" class="btn-block">Delete</a>
-        </div>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">DOB</th>
+      <th scope="col">Gender</th>
+      <th scope="col">Geade</th>
+      <th scope="col"></th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+  	{% for student in students %}
+  	{% if request.user == classroom.teacher %}
+    <tr>
+      <td>{{student.name}}</td>
+      <td>{{student.date_of_birth|linebreaks}}</td>
+      <td>{{student.gender}}</td>
+      <td>{{student.exam_grade}}</td>
+      <td><a href="{% url 'student-delete' student.id %}" class="btn-block">Delete</a></td>
+      <td><a href="{% url 'student-update' student.id %}" class="btn-block ">Update</a></td>
+    </tr>
+
+
+		
+  
         {% endif %}
-   
-    	</div>
-        {% endfor %}
+
+       {% endfor %} 
+   </tbody>
+
+	</table>
+	    	</div>
+        
+
 	</div>
-	</div
+	
 
 </div>
+
 {% endblock content %}
 
