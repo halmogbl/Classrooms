@@ -3,6 +3,7 @@ from django.contrib import messages
 from .models import Classroom, Student
 from .forms import ClassroomForm, StudentForm, SignupForm, SigninForm
 from django.contrib.auth import login, authenticate, logout
+from django.db.models import Q
 
 def acce(request):
     return render(request,"no-access.html")
@@ -51,8 +52,21 @@ def signout(request):
 
 def classroom_list(request):
     classrooms = Classroom.objects.all()
+
+    query = request.GET.get('q')
+    if query:
+        classrooms = classrooms.filter(
+            Q(teacher__username__icontains=query)|
+            Q(name__icontains=query)|
+            Q(subject__icontains=query)|
+            Q(year__icontains=query)
+
+            ).distinct()
+
+
     context = {
         "classrooms": classrooms,
+        "q": query
     }
     return render(request, 'classroom_list.html', context)
 
